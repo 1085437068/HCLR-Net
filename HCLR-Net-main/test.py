@@ -38,18 +38,18 @@ def Unet_transmission_map(underwater_path,T_Unet):
 
 if __name__ == '__main__':
 
-    test_path=r'/home/hzc/CodeRepository/UnderwaterEnhancement/DeepLearning/CNN/UWEnhancement/DATA/UIEB/Test/test'
+    test_path=r'Datasets/test/input'
 
-    pth_path=r'/share/zhangdan2013/code/torch-nn/UCR-Net/epoch428-psnr23.192-ssim0.925-train_loss0.203-val_loss0.073.ckpt'
+    pth_path=r'HCLR-CheckPoint/checkpoint1.ckpt'
 
     checkpoint = torch.load(pth_path, map_location='cuda:0')
     print(checkpoint)
     args = {
         'epochs': 500,
         # datasetsw
-        'train_datasets': r'/share/zhangdan2013/code/datasets/UIEB_end/train',
+        'train_datasets': r'Datasets/train/input',
         'test_datasets': None,
-        'val_datasets': r'/share/zhangdan2013/code/datasets/UIEB_end/val',
+        'val_datasets': r'Datasets/test/input',
         # bs
         'train_bs': 16,
         # 'train_bs':4,
