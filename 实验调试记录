@@ -28,5 +28,5 @@ def imageWriter(self, epoch, im:Union[dict, Tensor], tag=None, dataformats='CHW'
         self.test_batchsize = 1
         self.validation_datasets = self.params.val_datasets
         self.val_batchsize = 1
-(4)运行时间测算：大概8-10小时
+(4)运行时间测算：大概8-10小时  只保存最优的模型？
 
