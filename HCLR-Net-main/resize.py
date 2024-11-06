@@ -3,7 +3,7 @@ from PIL import Image
 from pathlib import Path
 import torchvision.transforms.functional as F
 
-ROOT = Path(os.getcwd()) / 'test'
+ROOT = Path(os.getcwd()) / 'Datasets/train/input'
 TARGET = Path('../../UIEB_resize') / 'test'
 os.makedirs(TARGET, exist_ok=True)
 folders = os.listdir(ROOT)

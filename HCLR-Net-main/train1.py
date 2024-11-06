@@ -102,7 +102,7 @@ def main():
         # datasetsw
         'train_datasets': r'Datasets/train',
         'test_datasets': None,
-        'val_datasets': r'Datasets/val',
+        'val_datasets': r'Datasets/test',
         # bs
         'train_bs': 16,
         # 'train_bs':4,

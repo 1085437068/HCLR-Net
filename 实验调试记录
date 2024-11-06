@@ -1,11 +1,32 @@
-1.虚拟环境pt190：
-pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio===0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
+1.虚拟环境pt111：
+pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0 -f https://download.pytorch.org/whl/torch_stable.html
+pytorch_lightning对应1.5.0， 
 
 2.预训练模型在readme最下面
 
-3.使用UIEBH裁剪成320x320尺寸的数据做数据集
+3.使用UIEBH裁剪成3256x256尺寸的数据做数据集
 
 4.运行test.py  --成功
 (1)需要新建一个test_results文件夹放结果
 
-5.运行train.py eopch原来是500，现在设置成100看下训练时间
+5.运行train.py 
+(1)修改monitor.py    
+def imageWriter(self, epoch, im:Union[dict, Tensor], tag=None, dataformats='CHW'):
+        if isinstance(im, dict):
+            for k ,v in im.items():
+                img = torchvision.utils.make_grid(v)
+                self.writer.add_image(k, img, epoch, dataformats=dataformats)
+        elif tag:
+            img = torchvision.utils.make_grid(im)
+            self.writer.add_image(tag, img, epoch, dataformats=dataformats)
+
+(2)PIL.Image.ANTIALIAS，可以将其替换为 PIL.Image.Resampling.LANCZOS（这是 ANTIALIAS 的替代品）
+(3)batch_size需要修改为1,不然会爆显存，train.py中修改为：
+        self.train_datasets = self.params.train_datasets
+        self.train_batchsize = 1
+        self.test_datasets = self.params.test_datasets
+        self.test_batchsize = 1
+        self.validation_datasets = self.params.val_datasets
+        self.val_batchsize = 1
+(4)运行时间测算：大概8-10小时
+

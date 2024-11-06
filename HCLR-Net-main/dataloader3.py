@@ -25,16 +25,21 @@ class Haze4kdataset(data.Dataset):
 
 
     def __getitem__(self, index):
+        if index >= len(self.haze_imgs):
+            raise IndexError(f"Index {index} is out of range for haze_imgs of length {len(self.haze_imgs)}")
 
         haze=Image.open(self.haze_imgs[index])
+        print(f"Loading haze image: {self.haze_imgs[index]}")
         if isinstance(self.size,int):
             while haze.size[0]<self.size or haze.size[1]<self.size or ('.png' not in self.haze_imgs[index]):
-                index=random.randint(0,799)
+                index=random.randint(0, len(self.haze_imgs) - 1)
                 haze=Image.open(self.haze_imgs[index])
+                print(f"Re-loading haze image: {self.haze_imgs[index]}")
 
         img=self.haze_imgs[index]
-        index1 = random.randint(0, 799)
+        index1 = random.randint(0, len(self.haze_imgs) - 1)
         haze2 = Image.open((self.haze_imgs[index1]))
+        print(f"Loading haze2 image: {self.haze_imgs[index1]}")
         name_syn=img.split('/')[-1]
         id = name_syn
         clear_name=id   

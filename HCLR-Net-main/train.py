@@ -33,11 +33,11 @@ class CoolSystem(pl.LightningModule):
 
         # train/val/test datasets
         self.train_datasets = self.params.train_datasets
-        self.train_batchsize = self.params.train_bs
+        self.train_batchsize = 1
         self.test_datasets = self.params.test_datasets
-        self.test_batchsize = self.params.test_bs
+        self.test_batchsize = 1
         self.validation_datasets = self.params.val_datasets
-        self.val_batchsize = self.params.val_bs
+        self.val_batchsize = 1
 
         # Train setting
         self.initlr = self.params.initlr  # initial learning
@@ -121,14 +121,23 @@ class CoolSystem(pl.LightningModule):
 def main():
     RESUME = False
     resume_checkpoint_path = r''
-    device = [int(x) for x in str(sys.argv[1]).split(',')]
-    print(device)
+    #device = [int(x) for x in str(sys.argv[1]).split(',')]
+    try:
+        if len(sys.argv) > 1:
+            device_ids = [int(x) for x in str(sys.argv[1]).split(',')]
+        else:
+            device_ids = [0]  # 默认使用第一个 GPU
+    except ValueError:
+        print("Error: Invalid device IDs. Please provide valid integers.")
+        return
+    #print(device)
     args = {
-        'epochs': 500,
+        #'epochs': 500,
+        'epochs': 100,
         # datasetsw
-        'train_datasets': r'/share/zhangdan2013/code/datasets/UIEB_resize/train',
+        'train_datasets': r'Datasets/train/',
         'test_datasets': None,
-        'val_datasets': r'/share/zhangdan2013/code/datasets/UIEB_resize/val',
+        'val_datasets': r'Datasets/test/',
         # bs
         'train_bs': 16,
         # 'train_bs':4,
@@ -161,7 +170,8 @@ def main():
     if RESUME:
         trainer = pl.Trainer(
             max_epochs=hparams.epochs,
-            gpus=device,
+            devices=device_ids,
+            accelerator="gpu",
             resume_from_checkpoint=resume_checkpoint_path,
             logger=logger,
             strategy='dp',
@@ -172,7 +182,8 @@ def main():
     else:
         trainer = pl.Trainer(
             max_epochs=hparams.epochs,
-            gpus=device,
+            devices=device_ids,
+            accelerator="gpu",
             logger=logger,
             strategy='dp',
             precision=16,
